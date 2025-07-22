@@ -1,22 +1,28 @@
 ---
-name: Auto-merge TOC updates
-
+name: automerge
 on:
   pull_request:
-    types: [opened]
-
+    types:
+      - synchronize
+      - opened
+      - edited
+      - ready_for_review
+      - reopened
+      - unlocked
+  check_suite:
+    types:
+      - completed
+  status: {}
 jobs:
-  enable-auto-merge-for-toc-update:
-    name: Enable auto-merge for TOC file update
-    if: github.event_name == 'pull_request' && github.actor == 'adamruzicka' && github.event.pull_request.title == 'Update TOC file from downstream'
+  automerge:
     runs-on: ubuntu-latest
     permissions:
       contents: write
       pull-requests: write
     steps:
-      - name: Checkout the repository
-        uses: actions/checkout@v2
-      - name: Enable auto-merge for TOC file update
-        run: gh pr merge ${{ github.event.pull_request.number }} --rebase --auto --delete-branch
+      - id: automerge
+        name: automerge
+        uses: "pascalgn/automerge-action@v0.16.4"
         env:
-          GH_TOKEN: ${{ github.token }}
+          GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
+          MERGE_LABELS: ""
