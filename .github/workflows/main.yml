@@ -17,6 +17,6 @@ jobs:
     name: Test
     strategy:
       fail-fast: false
-      steps:
-        - name: Sleep for 120 seconds
-          run: sleep 120
+    steps:
+      - name: Sleep for 120 seconds
+        run: sleep 120
